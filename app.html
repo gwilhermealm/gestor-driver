@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;min-height:100vh;margin:0;padding:0;background-color:#0b1326;color:#dae2fd;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}.brand-logo{filter:brightness(1.75) saturate(1.6) contrast(1.2) drop-shadow(0 0 12px rgba(111,251,190,.18));mix-blend-mode:screen;opacity:1;}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-tertiary-fixed":"#2a1700","tertiary":"#ffb95f","surface-variant":"#2d3449","on-primary-fixed":"#002113","on-tertiary-fixed-variant":"#653e00","secondary-fixed":"#cce5ff","secondary":"#93ccff","on-secondary-container":"#002c47","surface":"#0b1326","surface-container-high":"#222a3d","primary-container":"#10b981","primary-fixed-dim":"#4edea3","primary-fixed":"#6ffbbe","surface-dim":"#0b1326","on-primary":"#003824","tertiary-fixed-dim":"#ffb95f","surface-container-low":"#131b2e","on-tertiary-container":"#523200","on-tertiary":"#472a00","secondary-container":"#3198dc","on-secondary-fixed-variant":"#004b73","surface-container-lowest":"#060e20","error-container":"#93000a","surface-container-highest":"#2d3449","inverse-primary":"#006c49","outline-variant":"#3c4a42","primary":"#4edea3","tertiary-fixed":"#ffddb8","outline":"#86948a","on-primary-fixed-variant":"#005236","on-error-container":"#ffdad6","on-background":"#dae2fd","on-surface":"#dae2fd","secondary-fixed-dim":"#93ccff","error":"#ffb4ab","on-primary-container":"#00422b","tertiary-container":"#e29100","on-surface-variant":"#bbcabf","inverse-on-surface":"#283044","surface-tint":"#4edea3","background":"#0b1326","surface-bright":"#31394d","inverse-surface":"#dae2fd","on-error":"#690005","on-secondary":"#003351","on-secondary-fixed":"#001d31","surface-container":"#171f33"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-lg":"1.5rem","space-xl":"2rem","margin":"1rem","gutter":"0.75rem","space-sm":"0.5rem","space-md":"1rem","space-xs":"0.25rem"},"fontFamily":{"headline-md":["Manrope"],"headline-sm":["Manrope"],"body-sm":["Hanken Grotesk"],"display-currency-mobile":["Manrope"],"label-caps":["Manrope"],"body-lg":["Hanken Grotesk"],"metric-tabular":["Manrope"],"display-currency":["Manrope"],"headline-lg":["Manrope"],"body-md":["Hanken Grotesk"]},"fontSize":{"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"500"}],"display-currency-mobile":["30px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"800"}],"label-caps":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"400"}],"metric-tabular":["18px",{"lineHeight":"22px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-currency":["36px",{"lineHeight":"40px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}]}}}};</script></head><body class="bg-background font-body-md text-body-md text-on-surface min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container"><div class="w-full max-w-[390px] lg:max-w-6xl mx-auto min-h-screen flex flex-col relative bg-surface"><header class="fixed top-0 left-0 right-0 max-w-[390px] lg:max-w-6xl mx-auto z-50 bg-surface/85 backdrop-blur-xl pt-safe"><div class="h-16 lg:h-20 px-margin lg:px-10 flex items-center justify-between gap-gutter"><img alt="Logo Gestor Drive" class="brand-logo h-12 w-auto object-contain lg:h-14" src="https://lh3.googleusercontent.com/aida/AEtjO1VE7QMM6rVUwak1tcV2zQkvZvaX1pLN4cTHh6G_atphEN7oXsbaQ25UjihYC-tX7tzoOGDGFbofi9EppLindCc0PECkAkruDpzm56cArzPx5lh4S3kwpA-8RRpQBefw-bnImh_ylSbE-_4QvKRqQOLdylom0F_lyKkxn5ETAsLOUQsNlKmYne4xSpPIWHB55Y1090-pcEnu4Ps5B5BHHYdNkHLF0uznZPiRKoAevKKGJZ98FQWtVKZmPqVi"/><div class="flex items-center gap-space-xs"><div class="flex items-center gap-1 bg-surface-container-high px-2.5 py-1 rounded-full text-on-surface-variant">
+  <!-- Nome do Motorista em destaque no topo -->
+  <span id="user-name" class="font-label-caps text-label-caps text-on-surface font-bold uppercase tracking-wider hidden sm:block">
+    Carregando...
+  </span>
+  <span class="material-symbols-outlined text-[14px] text-primary">calendar_today</span><span class="font-label-caps text-label-caps text-on-surface">HOJE</span></div><button class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface transition-colors active:scale-95" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_#10b981]"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 ml-1"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full px-margin lg:px-10 pt-16 lg:pt-28 pb-28 lg:pb-16 bg-surface"><div id="view-dashboard" class="flex flex-col w-full gap-space-md lg:grid lg:grid-cols-3 lg:gap-space-lg lg:items-start"><!-- Seletor de Período em Pílulas -->
+<section class="w-full overflow-x-auto scrollbar-none py-space-xs lg:col-span-3">
+  <div class="flex items-center gap-space-xs whitespace-nowrap">
+    <button class="period-btn px-3.5 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps transition-transform active:scale-95 hover:text-on-surface" type="button" data-period="today">
+      HOJE
+    </button>
+    <button class="period-btn px-3.5 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps transition-transform active:scale-95 hover:text-on-surface" type="button" data-period="week">
+      ESTA SEMANA
+    </button>
+    <button class="period-btn px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-caps text-label-caps shadow-sm font-bold flex items-center gap-1 active:scale-95" type="button" data-period="month">
+      <span class="w-1.5 h-1.5 rounded-full bg-on-primary-container"></span>
+      ESTE MÊS
+    </button>
+    <button class="period-btn px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps flex items-center gap-1 transition-transform active:scale-95 hover:text-on-surface" type="button" data-period="custom">
+      <span>PERSONALIZADO</span>
+      <span class="material-symbols-outlined text-[14px] text-secondary">calendar_month</span>
+    </button>
+  </div>
+
+  <div id="custom-period-picker" class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center hidden">
+    <label class="flex items-center gap-2 bg-surface-container-high text-on-surface-variant rounded-lg px-3 py-2 text-body-sm font-body-sm">
+      <span class="material-symbols-outlined text-[16px] text-secondary">date_range</span>
+      <span>De</span>
+      <input type="date" class="bg-surface text-on-surface rounded-md border border-outline/30 px-2 py-1 focus:outline-none focus:border-primary" data-custom-start>
+    </label>
+
+    <label class="flex items-center gap-2 bg-surface-container-high text-on-surface-variant rounded-lg px-3 py-2 text-body-sm font-body-sm">
+      <span class="material-symbols-outlined text-[16px] text-secondary">event</span>
+      <span>Até</span>
+      <input type="date" class="bg-surface text-on-surface rounded-md border border-outline/30 px-2 py-1 focus:outline-none focus:border-primary" data-custom-end>
+    </label>
+  </div>
+</section>
+<!-- Card Principal: Ganho Líquido -->
+<section class="w-full bg-surface-container-low rounded-xl p-space-md shadow-md relative overflow-hidden lg:col-span-2">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start justify-between gap-2 mb-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Ganho Líquido do Período</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded-full text-primary">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class="font-label-caps text-label-caps">+14.2%</span>
+</div>
+</div>
+<!-- Valor Principal -->
+<div class="flex items-baseline gap-1 my-1">
+<span class="font-headline-sm text-headline-sm text-on-surface-variant">R$</span>
+<span id="dashboard-net-value" class="font-display-currency-mobile text-display-currency-mobile text-primary tracking-tight">0,00</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">Saldo livre após dedução de combustíveis e custos.</p>
+<!-- DRE Resumido / Fórmula Visual -->
+<div class="bg-surface-container-high rounded-lg p-2.5 flex items-center justify-between gap-1 text-on-surface">
+<div class="flex flex-col min-w-0">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Bruto</span>
+<span id="dashboard-gross-value" class="font-headline-sm text-headline-sm text-on-surface truncate">R$ 0,00</span>
+</div>
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">remove</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-caps text-[10px] text-tertiary uppercase">Despesas</span>
+<span id="dashboard-expenses-value" class="font-headline-sm text-headline-sm text-tertiary truncate">R$ 0,00</span>
+</div>
+<div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[14px] text-primary">equal</span>
+</div>
+<div class="flex flex-col min-w-0 text-right">
+<span class="font-label-caps text-[10px] text-primary uppercase">Líquido</span>
+<span id="dashboard-profit-rate" class="font-headline-sm text-headline-sm text-primary truncate">0.0%</span>
+</div>
+</div>
+</section>
+<!-- Grade de Métricas Operacionais (2x2) -->
+<section class="grid grid-cols-2 gap-space-xs lg:col-span-1">
+<!-- Card 1: Ganho Bruto -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Bruto</span>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+</div>
+</div>
+<div>
+<span id="dashboard-metric-gross-value" class="font-metric-tabular text-metric-tabular text-on-surface block truncate">R$ 0,00</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">0 corridas</span>
+</div>
+</div>
+<!-- Card 2: Total Despesas -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-tertiary uppercase">Despesas</span>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</div>
+</div>
+<div>
+<span id="dashboard-metric-expenses-value" class="font-metric-tabular text-metric-tabular text-tertiary block truncate">R$ 0,00</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">0.0% da receita</span>
+</div>
+</div>
+<!-- Card 3: Horas Online -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Tempo App</span>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">timelapse</span>
+</div>
+</div>
+<div>
+<span id="app-time-total" class="font-metric-tabular text-metric-tabular text-on-surface block truncate">0h 00m</span>
+<span id="app-time-average" class="font-body-sm text-body-sm text-on-surface-variant">Média 0.0h/dia</span>
+</div>
+</div>
+<!-- Card 4: Ganho por Hora -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Rendimento</span>
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+</div>
+</div>
+<div>
+<span id="dashboard-hourly-rate" class="font-metric-tabular text-metric-tabular text-primary block truncate">R$ 0,00<span class="text-xs font-normal text-on-surface-variant">/h</span></span>
+<div class="mt-1 inline-flex items-center gap-1 bg-surface-container px-1.5 py-0.5 rounded text-[10px] text-primary font-bold">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+          Meta &gt;R$25 batida!
+        </div>
+</div>
+</div>
+</section>
+<!-- Comentário: esta área foi mantida vazia no layout para remover o card de despesas por categoria e evitar dados mockados do protótipo. -->
+
+<!-- Card de Despesas por Categoria -->
+<div class="bg-surface border border-outline-variant rounded-2xl p-4 shadow-sm">
+  <h3 class="text-title-sm font-semibold text-on-surface mb-3">Despesas por Categoria</h3>
+  
+  <!-- Contêiner dinâmico das barras -->
+  <div id="category-expenses-list" class="space-y-3">
+    <!-- As barras serão injetadas via JavaScript aqui -->
+    <p class="text-body-sm text-on-surface-variant text-center py-2">Carregando despesas...</p>
+  </div>
+</div>
+
+
+<!-- Card removido: evolução do mês foi desativado para evitar o mockup e manter o dashboard mais enxuto. -->
+
+<!-- Seção: Observações do Turno (Substitui o Gráfico de Evolução) -->
+<section class="bg-surface-container-low rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm lg:col-span-2">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg bg-tertiary/15 text-tertiary flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[20px]">notes</span>
+      </div>
+      <div class="flex flex-col">
+        <h3 class="font-headline-sm text-headline-sm text-on-surface">Observações do Turno</h3>
+        <span class="font-body-sm text-body-sm text-on-surface-variant">Anotações e justificativas registadas</span>
+      </div>
+    </div>
+    <span class="font-label-caps text-[10px] text-tertiary bg-tertiary/10 px-2.5 py-1 rounded-full uppercase font-bold tracking-wider">
+      Ativo
+    </span>
+  </div>
+
+  <!-- Contentor do Texto de Observação -->
+  <div class="w-full bg-surface-container rounded-lg p-4 flex flex-col justify-between min-h-[120px] border border-outline-variant/20">
+    <div class="flex items-start gap-2.5">
+      <span class="material-symbols-outlined text-[18px] text-on-surface-variant/70 mt-0.5 shrink-0">format_quote</span>
+      <p id="dashboard-turn-notes" class="font-body-md text-body-md text-on-surface leading-relaxed italic">
+        Nenhuma observação registada para este turno.
+      </p>
+    </div>
+
+    <div class="flex items-center justify-end gap-1.5 pt-3 mt-2 border-t border-outline-variant/15 text-on-surface-variant font-label-caps text-[10px]">
+      <span class="material-symbols-outlined text-[14px] text-primary">verified</span>
+      <span>Registo do Turno Ativo</span>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+<!-- Regra de Negócio Crítica: Análise Comparativa Trimestral (Locked) -->
+<section class="bg-surface-container-low rounded-xl p-space-md shadow-md relative overflow-hidden flex flex-col gap-space-md lg:col-span-3">
+<!-- Header da Seção -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded bg-surface-container-high flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">insights</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Histórico Trimestral</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Comparativo multi-mês</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-label-caps text-label-caps flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+        2/3 MESES
+      </span>
+</div>
+<!-- Banner de Progresso dos 3 Meses -->
+<div class="bg-surface-container rounded-lg p-3 flex flex-col gap-2">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface font-headline-sm text-headline-sm">Progresso de Maturação</span>
+<span class="text-primary font-metric-tabular font-bold">66%</span>
+</div>
+<!-- Barra de Progresso Segmentada -->
+<div class="w-full h-2.5 bg-surface-container-high rounded-full p-0.5 flex gap-1">
+<div class="h-full w-1/3 bg-primary rounded-full"></div>
+<div class="h-full w-1/3 bg-primary rounded-full"></div>
+<div class="h-full w-1/3 bg-surface-container-highest rounded-full"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] font-label-caps text-on-surface-variant pt-0.5">
+<span class="text-primary flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">check</span>Mês 1 (Concluído)</span>
+<span class="text-primary flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">check</span>Mês 2 (Concluído)</span>
+<span class="text-tertiary">Mês 3 (Atual)</span>
+</div>
+</div>
+<!-- Prévia Embaçada / Glassmorphism da Funcionalidade Bloqueada -->
+<div class="relative rounded-lg overflow-hidden bg-surface-container p-4 min-h-[160px] flex flex-col justify-center">
+<!-- Mock Gráficos de Fundo (Simulando Ganho Líquido, Horas e R$/h) -->
+<div class="absolute inset-0 opacity-25 filter blur-[3px] select-none pointer-events-none p-3 flex flex-col justify-between">
+<div class="flex justify-between items-end h-20 gap-3 px-4 pt-4">
+<div class="w-1/3 bg-primary/40 rounded-t-lg h-[50%]"></div>
+<div class="w-1/3 bg-primary/60 rounded-t-lg h-[75%]"></div>
+<div class="w-1/3 bg-primary rounded-t-lg h-[90%]"></div>
+</div>
+<div class="flex justify-between text-[9px] text-on-surface-variant font-label-caps">
+<span>MAR/24 (R$ 3.9k)</span>
+<span>ABR/24 (R$ 4.2k)</span>
+<span>MAI/24 (R$ 4.8k)</span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<!-- Card Flutuante com Mensagem Amigável -->
+<div class="relative z-10 bg-surface-container-high/90 backdrop-blur-md rounded-lg p-3 shadow-lg flex flex-col items-center text-center gap-2">
+<div class="w-10 h-10 rounded-full bg-tertiary/15 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug px-1">
+          Continue registrando seus dados. Os gráficos comparativos trimestrais serão liberados após <strong class="text-primary">3 meses completos</strong> de corridas.
+        </p>
+</div>
+</div>
+<!-- Botão de Ação / Incentive -->
+<button class="w-full h-12 bg-primary-container text-on-primary-container font-headline-sm text-headline-sm rounded-lg flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+<span>Falta apenas 1 mês para desbloquear!</span>
+</button>
+</section>
+<!-- Dica Pro de Produtividade Diária -->
+<section class="bg-surface-container-low rounded-xl p-space-md shadow-sm flex items-center gap-3 lg:col-span-3">
+<div class="w-10 h-10 rounded-full bg-secondary/15 flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[22px]">lightbulb</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface">Pico de Demarcação</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Sextas e sábados das 18h às 23h geram +28% de lucro líquido.</span>
+</div>
+</section>
+</div>
+<div id="view-registrar" class="flex flex-col w-full gap-space-md lg:grid lg:grid-cols-[1fr_400px] lg:gap-space-lg lg:items-start" style="display:none"><div class="contents lg:flex lg:flex-col lg:gap-space-md">
+<!-- Micro Banner Status / Feedback do Turno -->
+<div class="flex items-center justify-between px-space-md py-space-sm bg-surface-container-low rounded-xl">
+<div class="flex items-center gap-space-xs text-primary min-w-0">
+<span class="material-symbols-outlined text-[18px] shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">Último fechamento salvo às 22:45</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary font-bold uppercase tracking-wider shrink-0 bg-primary/10 px-2 py-0.5 rounded-full">Sincronizado</span>
+</div>
+<!-- Cabeçalho Seletor de Data Rápido -->
+<!-- Cabeçalho Seletor de Data Rápido (Com Calendário Nativo Funcional) -->
+<div class="flex items-center justify-between gap-space-xs bg-surface-container-high p-1.5 rounded-xl relative">
+  <!-- Botão Ontem -->
+  <button class="flex items-center gap-1 px-3 py-2 rounded-lg bg-surface-container hover:bg-surface-bright active:scale-95 transition-all text-on-surface-variant text-body-sm font-body-sm z-10" id="btn-yesterday" type="button">
+    <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+    <span>Ontem</span>
+  </button>
+
+  <!-- Container Central Interativo -->
+  <div class="relative flex-1 flex items-center justify-center min-w-0">
+    <!-- Input de Data Nativo (Invisível por cima para abrir o calendário ao clicar) -->
+    <input type="date" id="input-date-picker" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-20" />
+    
+    <!-- Rótulo Visível da Data -->
+    <div class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-surface text-primary font-headline-sm text-headline-sm w-full pointer-events-none">
+      <span class="material-symbols-outlined text-[18px] shrink-0">calendar_today</span>
+      <span class="truncate font-semibold" id="label-active-date">Hoje</span>
+    </div>
+  </div>
+
+  <!-- Botão Hoje -->
+  <button class="flex items-center gap-1 px-3 py-2 rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-bold active:scale-95 transition-all shadow-sm z-10" id="btn-today" type="button">
+    <span>Hoje</span>
+    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+  </button>
+</div>
+
+
+<!-- SEÇÃO 1: Ganhos & Turno -->
+<div class="flex flex-col bg-surface-container-high rounded-xl p-space-md gap-space-md shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary/15 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Ganhos &amp; Turno</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Faturamento bruto das plataformas</p>
+</div>
+</div>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">Obrigatório</span>
+</div>
+<!-- Input Principal Ganho Bruto -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider" for="input-gross">Ganho Bruto do Dia</label>
+<div class="relative flex items-center bg-surface rounded-xl px-4 py-3 min-h-[58px]">
+<span class="font-headline-md text-headline-md text-on-surface-variant select-none mr-2 font-bold">R$</span>
+<input class="w-full bg-transparent font-display-currency-mobile text-display-currency-mobile text-primary font-extrabold focus:outline-none placeholder-outline-variant" id="input-gross" inputmode="decimal" placeholder="0,00" step="0.5" type="number" value="0.00"/>
+<button class="p-1 rounded-full text-on-surface-variant hover:text-on-surface active:scale-90" id="btn-clear-gross" type="button">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+</button>
+</div>
+<!-- Quick Add Pills -->
+<div class="flex items-center gap-2 pt-1">
+<button class="btn-quick-add flex-1 py-2 rounded-lg bg-surface-container text-on-surface font-headline-sm text-headline-sm active:scale-95 transition-all text-center hover:bg-surface-bright" data-add="50" type="button">+R$ 50</button>
+<button class="btn-quick-add flex-1 py-2 rounded-lg bg-surface-container text-on-surface font-headline-sm text-headline-sm active:scale-95 transition-all text-center hover:bg-surface-bright" data-add="100" type="button">+R$ 100</button>
+<button class="btn-quick-add flex-1 py-2 rounded-lg bg-surface-container text-on-surface font-headline-sm text-headline-sm active:scale-95 transition-all text-center hover:bg-surface-bright" data-add="150" type="button">+R$ 150</button>
+</div>
+</div>
+<!-- Seletor Horas Trabalhadas com Stepper -->
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Tempo Online no App</label>
+<span class="font-body-sm text-body-sm text-secondary font-semibold" id="badge-hours-decimal">0.0 horas</span>
+</div>
+<div class="flex items-center justify-between bg-surface rounded-xl p-2 min-h-[58px]">
+<button class="w-12 h-12 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center active:scale-90 transition-transform" id="btn-sub-hours" type="button">
+<span class="material-symbols-outlined text-[24px]">remove</span>
+</button>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg text-on-surface font-extrabold" id="display-hours">0</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">h</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-extrabold ml-1" id="display-mins">00</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">min</span>
+</div>
+<button class="w-12 h-12 rounded-lg bg-surface-container-high text-primary flex items-center justify-center active:scale-90 transition-transform" id="btn-add-hours" type="button">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- SEÇÃO 2: Despesas do Dia (Acordeão / Lista Tática com Ícones Categorizados) -->
+<div class="flex flex-col bg-surface-container-high rounded-xl p-space-md gap-space-md shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-tertiary-container/30 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">local_gas_station</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Despesas do Turno</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Custos operacionais de hoje</p>
+</div>
+</div>
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold px-2.5 py-1 bg-surface-container-lowest rounded-lg" id="badge-total-expenses">R$ 140,00</span>
+</div>
+<!-- Lista de Entradas com Ícones Grandes para Toque em Cockpit -->
+<div class="flex flex-col gap-2.5">
+<!-- Item: Gasolina -->
+<div class="flex items-center justify-between p-2.5 bg-surface rounded-xl gap-2 min-h-[52px]">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-tertiary-container/20 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">local_gas_station</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">Combustível</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Gasolina / GNV / Etanol</span>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container px-2 py-1 rounded-lg">
+<span class="font-body-sm text-body-sm text-on-surface-variant">R$</span>
+<input class="input-expense w-16 bg-transparent text-right font-headline-sm text-headline-sm text-on-surface font-bold focus:outline-none" data-category="combustivel" inputmode="decimal" step="1" type="number" value="0.00"/>
+</div>
+</div>
+<!-- Item: Óleo / Fluídos -->
+<div class="flex items-center justify-between p-2.5 bg-surface rounded-xl gap-2 min-h-[52px]">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-secondary-container/20 text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">water_drop</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">Óleo e Fluídos</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Lubrificantes e filtros</span>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container px-2 py-1 rounded-lg">
+<span class="font-body-sm text-body-sm text-on-surface-variant">R$</span>
+<input class="input-expense w-16 bg-transparent text-right font-headline-sm text-headline-sm text-on-surface font-bold focus:outline-none" data-category="oleo" inputmode="decimal" step="1" type="number" value="0.00"/>
+</div>
+</div>
+<!-- Item: Manutenção -->
+<div class="flex items-center justify-between p-2.5 bg-surface rounded-xl gap-2 min-h-[52px]">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">build</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">Manutenção</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Oficina e peças</span>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container px-2 py-1 rounded-lg">
+<span class="font-body-sm text-body-sm text-on-surface-variant">R$</span>
+<input class="input-expense w-16 bg-transparent text-right font-headline-sm text-headline-sm text-on-surface font-bold focus:outline-none" data-category="manutencao" inputmode="decimal" step="1" type="number" value="0.00"/>
+</div>
+</div>
+<!-- Item: Emergências -->
+<div class="flex items-center justify-between p-2.5 bg-surface rounded-xl gap-2 min-h-[52px]">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-error-container/40 text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">tire_repair</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">Emergências</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Pneu, pedágio, reboque</span>
+</div>
+</div>
+<div class="flex items-center gap-1 shrink-0 bg-surface-container px-2 py-1 rounded-lg">
+<span class="font-body-sm text-body-sm text-on-surface-variant">R$</span>
+<input class="input-expense w-16 bg-transparent text-right font-headline-sm text-headline-sm text-on-surface font-bold focus:outline-none" data-category="emergencia" inputmode="decimal" step="1" type="number" value="0.00"/>
+</div>
+</div>
+<!-- Item: Alimentação & Geral -->
+<div class="flex items-center justify-between p-2.5 bg-surface rounded-xl gap-2 min-h-[52px]">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-tertiary-fixed-dim/20 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">lunch_dining</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">Alimentação &amp; Outros</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Refeição, café e água</span>
+</div>
+</div>
+
+<div class="flex items-center gap-1 shrink-0 bg-surface-container px-2 py-1 rounded-lg">
+<span class="font-body-sm text-body-sm text-on-surface-variant">R$</span>
+<input class="input-expense w-16 bg-transparent text-right font-headline-sm text-headline-sm text-on-surface font-bold focus:outline-none" data-category="alimentacao" inputmode="decimal" step="1" type="number" value="0.00"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="contents lg:flex lg:flex-col lg:gap-space-md lg:sticky lg:top-28">
+  <!-- Campo de Observações / Justificativa de Despesas -->
+<div class="flex flex-col gap-1.5 pt-2">
+  <label class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider flex items-center gap-1.5" for="input-expense-notes">
+    <span class="material-symbols-outlined text-[16px] text-tertiary">edit_note</span>
+    <span>Justificativa / Observações das Despesas</span>
+  </label>
+  <textarea 
+    id="input-expense-notes" 
+    rows="2" 
+    class="w-full bg-surface text-on-surface font-body-sm text-body-sm rounded-xl p-3 border border-outline-variant/30 focus:outline-none focus:border-tertiary transition-all placeholder:text-on-surface-variant/50 resize-none"
+    placeholder="Ex: Troca de óleo da marca X e alinhamento das rodas no Posto Y..."></textarea>
+</div>
+<!-- SEÇÃO 3: Resumo Automático em Tempo Real (Cockpit Financeiro) -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-md gap-3 shadow-lg relative overflow-hidden">
+<!-- Glow sutil de lucro de fundo -->
+<div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-primary/10 blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">monitoring</span>
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider font-bold">Cockpit de Rentabilidade</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary bg-primary/15 px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+        Tempo Real
+      </span>
+</div>
+<!-- Linhas de Decomposição Financeira -->
+<div class="flex flex-col gap-2 pt-1">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Ganho Bruto Acumulado</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold" id="summary-gross">R$ 380,00</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Total de Despesas Operacionais</span>
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold" id="summary-expenses">- R$ 140,00</span>
+</div>
+<!-- Divisória visual sutil através de cor de superfície -->
+<div class="h-0.5 w-full bg-surface-container my-1"></div>
+<!-- Destaque: Ganho Líquido -->
+<div class="flex items-end justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant">Lucro Líquido Real</span>
+<span class="font-body-sm text-body-sm text-primary font-medium">Livre no bolso</span>
+</div>
+<div class="flex items-baseline gap-1 text-primary">
+<span class="font-headline-md text-headline-md font-bold">R$</span>
+<span class="font-display-currency-mobile text-display-currency-mobile font-extrabold tracking-tight" id="summary-net">240,00</span>
+</div>
+</div>
+</div>
+<!-- Métrica de Eficiência: Ganho Por Hora -->
+<div class="flex items-center justify-between bg-surface-container-high p-3 rounded-lg mt-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary">speed</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Rendimento por Hora</span>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold" id="formula-hourly">R$ 240,00 ÷ 8.5h</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-secondary-container/20 px-3 py-1.5 rounded-lg text-secondary">
+<span class="font-headline-md text-headline-md font-extrabold" id="summary-hourly">R$ 28,24</span>
+<span class="font-body-sm text-body-sm">/h</span>
+</div>
+</div>
+</div>
+<!-- Botão de Ação Primária Flutuante/Fixo Tátil -->
+<div class="pt-2 pb-1">
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl font-headline-md text-headline-md flex items-center justify-center gap-2 shadow-lg active:scale-98 transition-all" id="btn-save-record" type="button">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span >Salvar Registro Diário</span>
+</button>
+</div>
+</div>
+<!-- Toast Notification Overlay (Micro-interação) -->
+<div class="fixed top-20 left-4 right-4 max-w-[360px] mx-auto bg-primary-container text-on-primary-container p-3 rounded-xl shadow-xl flex items-center justify-between gap-2 z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none" id="toast-success">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[22px]">verified</span>
+<span class="font-headline-sm text-headline-sm font-bold">Turno salvo com sucesso!</span>
+</div>
+<span class="font-body-sm text-body-sm opacity-80">Hoje às 22:45</span>
+</div>
+</div>
+<div id="view-historico" class="flex flex-col w-full min-h-[50vh] items-center justify-center text-center gap-3 lg:col-span-3" style="display:none">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[28px]">history</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Histórico em construção</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Em breve você poderá consultar todos os turnos e fechamentos anteriores por aqui.</p>
+</div>
+<div id="view-perfil" class="flex flex-col w-full min-h-[50vh] items-center justify-center text-center gap-4 lg:col-span-3" style="display:none">
+  <div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center text-primary shadow-inner">
+    <span class="material-symbols-outlined text-[36px]">account_circle</span>
+  </div>
+  
+  <div class="flex flex-col gap-1">
+    <h2 id="profile-user-name" class="font-headline-lg text-headline-lg text-on-surface font-bold">
+      Carregando...
+    </h2>
+    <p id="user-email" class="font-body-sm text-body-sm text-on-surface-variant">
+      carregando@email.com
+    </p>
+  </div>
+
+  <button id="btnLogout" type="button" class="mt-4 px-6 py-2.5 rounded-xl bg-error-container/40 text-error font-headline-sm text-headline-sm flex items-center gap-2 hover:bg-error-container transition-colors active:scale-95">
+    <span class="material-symbols-outlined text-[20px]">logout</span>
+    <span>Sair da Conta</span>
+  </button>
+</div>
+
+
+
+
+</main><nav class="fixed bottom-0 left-0 right-0 max-w-[390px] lg:max-w-6xl mx-auto z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.5)]" id="bottom-nav"><div class="flex items-end justify-around lg:justify-center lg:gap-16 h-20 px-space-xs relative"><a class="nav-link flex flex-col items-center justify-center gap-1 w-16 h-16 pb-2 transition-transform active:scale-95" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-caps text-label-caps">Dashboard</span></a>
+  
+<a class="nav-link flex flex-col items-center justify-center gap-1 w-16 h-16 pb-2 transition-transform active:scale-95" data-path="registrar" href="#">
+  <span class="material-symbols-outlined text-[24px]">add_task</span>
+  <span class="font-label-caps text-label-caps">Registrar</span>
+</a>
+
+
+<a class="nav-link flex flex-col items-center justify-center gap-1 w-16 h-16 pb-2 transition-transform active:scale-95" data-path="historico" href="#"><span class="material-symbols-outlined text-[24px]">history</span><span class="font-label-caps text-label-caps">Histórico</span></a><a class="nav-link flex flex-col items-center justify-center gap-1 w-16 h-16 pb-2 transition-transform active:scale-95" data-path="perfil" href="#"><span class="material-symbols-outlined text-[24px]">account_circle</span><span class="font-label-caps text-label-caps">Perfil</span></a></div></nav></div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="src/config.js"></script>
+<!-- 2. Depois carrega o seu script que usa o Supabase -->
+<script src="src/app.js"></script>
+
+
+</body>
+
+</html>
