@@ -7,6 +7,26 @@ async function validarAcesso() {
   }
 }
 validarAcesso();
+
+function mostrarToastSucesso(mensagem) {
+  const toast = document.getElementById('toast-success');
+  if (!toast) return;
+
+  const messageElement = toast.querySelector('[data-toast-message]');
+  const timeElement = toast.querySelector('[data-toast-time]');
+  if (messageElement) messageElement.textContent = mensagem;
+  if (timeElement) {
+    timeElement.textContent = `Hoje às ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+  }
+
+  toast.classList.remove('-translate-y-24', 'opacity-0');
+  toast.classList.add('translate-y-0', 'opacity-100');
+  clearTimeout(toast.dataset.hideTimeout);
+  toast.dataset.hideTimeout = setTimeout(() => {
+    toast.classList.remove('translate-y-0', 'opacity-100');
+    toast.classList.add('-translate-y-24', 'opacity-0');
+  }, 2500);
+}
  
  
  
@@ -39,12 +59,141 @@ document.addEventListener('DOMContentLoaded', async () => {
   const monthlyExpenseModal = document.getElementById('monthly-expense-modal');
   const monthlyExpenseForm = document.getElementById('monthly-expense-form');
   const monthlyExpenseError = document.getElementById('monthly-expense-error');
-  const monthlyExpenseFeedback = document.getElementById('monthly-expense-feedback');
   const saveMonthlyExpenseButton = document.getElementById('btn-save-monthly-expense');
+  const monthlyExpenseStartInput = document.getElementById('monthly-expense-start');
+  const monthlyExpenseDueDayInput = document.getElementById('monthly-expense-due-day');
+  const monthlyExpenseListToggle = document.getElementById('btn-toggle-monthly-expenses');
+  const monthlyExpenseListPanel = document.getElementById('monthly-expenses-list');
+  const monthlyExpenseListIcon = document.getElementById('monthly-expenses-toggle-icon');
+  const monthlyExpenseListLabel = document.getElementById('monthly-expenses-toggle-label');
+  const monthlyExpenseListMessage = document.getElementById('monthly-expenses-list-message');
+  const monthlyExpenseItems = document.getElementById('monthly-expenses-items');
+
+  function obterMesAtual() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  }
+
+  if (monthlyExpenseStartInput) {
+    monthlyExpenseStartInput.defaultValue = obterMesAtual();
+    monthlyExpenseStartInput.value = obterMesAtual();
+  }
+
+  if (monthlyExpenseDueDayInput) {
+    monthlyExpenseDueDayInput.defaultValue = '1';
+    monthlyExpenseDueDayInput.value = '1';
+  }
+
+  async function carregarDespesasRecorrentes() {
+    if (!monthlyExpenseListMessage || !monthlyExpenseItems) return;
+
+    monthlyExpenseListMessage.textContent = 'Carregando despesas...';
+    monthlyExpenseListMessage.classList.remove('hidden', 'text-error');
+    monthlyExpenseListMessage.classList.add('text-on-surface-variant');
+    monthlyExpenseItems.replaceChildren();
+
+    try {
+      const { data: expenses, error: expensesError } = await supabaseClient
+        .from('despesas_recorrentes')
+        .select('id, nome, valor, data_inicio, data_vencimento')
+        .eq('usuario_id', user.id)
+        .is('fim_em', null)
+        .order('nome', { ascending: true });
+
+      if (expensesError) throw expensesError;
+
+      if (!expenses?.length) {
+        monthlyExpenseListMessage.textContent = 'Nenhuma despesa recorrente cadastrada.';
+        return;
+      }
+
+      monthlyExpenseListMessage.classList.add('hidden');
+      expenses.forEach((expense) => {
+        const item = document.createElement('li');
+        item.className = 'flex items-center justify-between gap-3 border-b border-outline-variant/20 py-3 last:border-0';
+
+        const details = document.createElement('div');
+        details.className = 'flex min-w-0 flex-col text-left';
+
+        const name = document.createElement('span');
+        name.className = 'break-words font-body-md text-body-md font-semibold text-on-surface';
+        name.textContent = expense.nome;
+
+        const value = document.createElement('span');
+        value.className = 'font-body-sm text-body-sm text-on-surface-variant';
+        value.textContent = `R$ ${Number(expense.valor || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / mês`;
+
+        const startMonth = new Date(`${expense.data_inicio}T00:00:00`);
+        const schedule = document.createElement('span');
+        schedule.className = 'font-body-sm text-body-sm text-on-surface-variant';
+        schedule.textContent = `Início ${startMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })} · vence dia ${expense.data_vencimento} de cada mês`;
+
+        details.append(name, value, schedule);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.dataset.expenseId = expense.id;
+        deleteButton.setAttribute('aria-label', `Excluir despesa ${expense.nome}`);
+        deleteButton.title = 'Excluir despesa';
+        deleteButton.className = 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-error hover:bg-error-container/30 disabled:opacity-50';
+
+        const deleteIcon = document.createElement('span');
+        deleteIcon.className = 'material-symbols-outlined';
+        deleteIcon.textContent = 'close';
+        deleteButton.appendChild(deleteIcon);
+
+        item.append(details, deleteButton);
+        monthlyExpenseItems.appendChild(item);
+      });
+    } catch (expensesError) {
+      console.error('Erro ao carregar despesas recorrentes:', expensesError);
+      monthlyExpenseListMessage.textContent = `Não foi possível carregar: ${expensesError.message || expensesError}`;
+      monthlyExpenseListMessage.classList.remove('hidden', 'text-on-surface-variant');
+      monthlyExpenseListMessage.classList.add('text-error');
+    }
+  }
+
+  if (monthlyExpenseListToggle && monthlyExpenseListPanel) {
+    monthlyExpenseListToggle.addEventListener('click', async () => {
+      const shouldOpen = monthlyExpenseListPanel.classList.contains('hidden');
+      monthlyExpenseListPanel.classList.toggle('hidden', !shouldOpen);
+      monthlyExpenseListToggle.setAttribute('aria-expanded', String(shouldOpen));
+      if (monthlyExpenseListIcon) monthlyExpenseListIcon.textContent = shouldOpen ? 'expand_less' : 'expand_more';
+      if (monthlyExpenseListLabel) monthlyExpenseListLabel.textContent = shouldOpen ? 'Ocultar lista' : 'Ver despesas';
+
+      if (shouldOpen) await carregarDespesasRecorrentes();
+    });
+  }
+
+  if (monthlyExpenseItems) {
+    monthlyExpenseItems.addEventListener('click', async (event) => {
+      const deleteButton = event.target.closest?.('button[data-expense-id]');
+      if (!deleteButton) return;
+
+      deleteButton.disabled = true;
+      try {
+        const { data: deletedExpense, error: deleteError } = await supabaseClient
+          .rpc('encerrar_despesa_recorrente', { p_despesa_id: deleteButton.dataset.expenseId });
+
+        if (deleteError) throw deleteError;
+        if (!deletedExpense) throw new Error('Despesa não encontrada ou sem permissão para excluir.');
+
+        await carregarDespesasRecorrentes();
+        if (typeof window.carregarMétricasDashboard === 'function') {
+          await window.carregarMétricasDashboard();
+        }
+      } catch (deleteError) {
+        monthlyExpenseListMessage.textContent = `Não foi possível excluir: ${deleteError.message || deleteError}`;
+        monthlyExpenseListMessage.classList.remove('hidden', 'text-on-surface-variant');
+        monthlyExpenseListMessage.classList.add('text-error');
+      } finally {
+        if (deleteButton.isConnected) deleteButton.disabled = false;
+      }
+    });
+  }
 
   if (openMonthlyExpenseButton && monthlyExpenseModal) {
     openMonthlyExpenseButton.addEventListener('click', () => {
-      monthlyExpenseFeedback?.classList.add('hidden');
       monthlyExpenseError?.classList.add('hidden');
       monthlyExpenseModal.showModal();
       document.getElementById('monthly-expense-name')?.focus();
@@ -69,19 +218,39 @@ document.addEventListener('DOMContentLoaded', async () => {
       const formData = new FormData(monthlyExpenseForm);
       const nome = String(formData.get('nome') || '').trim();
       const valor = Number(formData.get('valor'));
+      const inicioMes = String(formData.get('data_inicio') || '');
+      const diaVencimento = Number(formData.get('data_vencimento'));
+      const formatoMesValido = /^\d{4}-(0[1-9]|1[0-2])$/;
+
+      if (!formatoMesValido.test(inicioMes) || !Number.isInteger(diaVencimento) || diaVencimento < 1 || diaVencimento > 31) {
+        monthlyExpenseError.textContent = 'Informe um mês de início válido e um dia de vencimento entre 1 e 31.';
+        monthlyExpenseError.classList.remove('hidden');
+        saveMonthlyExpenseButton.disabled = false;
+        saveMonthlyExpenseButton.textContent = 'Salvar despesa';
+        return;
+      }
 
       try {
         const { error: insertError } = await supabaseClient
           .from('despesas_recorrentes')
-          .insert({ usuario_id: user.id, nome, valor });
+          .insert({
+            usuario_id: user.id,
+            nome,
+            valor,
+            data_inicio: `${inicioMes}-01`,
+            data_vencimento: diaVencimento
+          });
 
         if (insertError) throw insertError;
 
         monthlyExpenseForm.reset();
         monthlyExpenseModal?.close();
-        if (monthlyExpenseFeedback) {
-          monthlyExpenseFeedback.textContent = 'Despesa mensal cadastrada com sucesso.';
-          monthlyExpenseFeedback.classList.remove('hidden');
+        mostrarToastSucesso('Despesa mensal cadastrada com sucesso!');
+        if (monthlyExpenseListPanel && !monthlyExpenseListPanel.classList.contains('hidden')) {
+          await carregarDespesasRecorrentes();
+        }
+        if (typeof window.carregarMétricasDashboard === 'function') {
+          await window.carregarMétricasDashboard();
         }
       } catch (insertError) {
         const errorInfo = {
@@ -147,7 +316,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Elementos da interface
     const inputGross = document.getElementById('input-gross');
     const inputNotes = document.getElementById('input-expense-notes');
-    const notesElement = document.getElementById('dashboard-turn-notes');
     const expenseInputs = document.querySelectorAll('.input-expense');
 
     // Reseta todos os campos de despesa primeiro
@@ -157,23 +325,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Preenche os dados do turno encontrado
       if (inputGross) inputGross.value = Number(turno.ganho_bruto || 0).toFixed(2);
       if (inputNotes) inputNotes.value = turno.observacao || '';
-
-      if (notesElement) {
-        if (turno.observacao && turno.observacao.trim() !== '') {
-          const dataObservacao = new Date(`${dataTurno}T00:00:00`);
-          const dataLabel = !Number.isNaN(dataObservacao.getTime())
-            ? dataObservacao.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
-            : dataTurno;
-
-          notesElement.textContent = `"${turno.observacao}" — ${dataLabel}`;
-          notesElement.classList.remove('text-on-surface-variant/60', 'not-italic');
-          notesElement.classList.add('text-on-surface', 'italic');
-        } else {
-          notesElement.textContent = 'Nenhuma observação registada para este turno.';
-          notesElement.classList.add('text-on-surface-variant/60');
-          notesElement.classList.remove('italic');
-        }
-      }
 
       // Atualiza horas e minutos na interface
       const totalMinutos = turno.minutos_online || 0;
@@ -204,12 +355,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Se não houver registro para o dia, zera a tela limpa
       if (inputGross) inputGross.value = '0.00';
       if (inputNotes) inputNotes.value = '';
-
-      if (notesElement) {
-        notesElement.textContent = 'Nenhuma observação registada para este turno.';
-        notesElement.classList.add('text-on-surface-variant/60');
-        notesElement.classList.remove('italic');
-      }
       
       const displayHours = document.getElementById('display-hours');
       const displayMins = document.getElementById('display-mins');
@@ -252,7 +397,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function salvarTurnoNoSupabase() {
   const btnSave = document.getElementById('btn-save-record');
-  const toast = document.getElementById('toast-success');
 
   const observacao = document.getElementById('input-expense-notes')?.value.trim() || '';
   
@@ -355,15 +499,7 @@ async function salvarTurnoNoSupabase() {
     }
 
     // 7. Animação de sucesso (Toast)
-    if (toast) {
-      toast.classList.remove('-translate-y-24', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('-translate-y-24', 'opacity-0');
-      }, 2500);
-    }
+    mostrarToastSucesso('Turno salvo com sucesso!');
 
     // Recarrega as métricas do dashboard após salvar
     if (typeof window.carregarMétricasDashboard === 'function') {
@@ -745,7 +881,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (summaryNet) summaryNet.textContent = 'R$ ' + formatBRL(net);
   }
 
-  function updateAppTimeMetrics(turnos, totalExpenses = 0) {
+  function updateAppTimeMetrics(turnos, netValue = 0) {
     const totalMinutes = (turnos || []).reduce((sum, turno) => sum + Number(turno.minutos_online || 0), 0);
     const totalHours = totalMinutes / 60;
     const avgHours = (turnos || []).length ? totalHours / (turnos || []).length : 0;
@@ -764,11 +900,8 @@ document.addEventListener('DOMContentLoaded', () => {
       appAverage.textContent = `Média ${(avgHours || 0).toFixed(1)}h/dia`;
     }
 
-    const grossValue = (turnos || []).reduce((sum, turno) => sum + Number(turno.ganho_bruto || 0), 0);
-    const netAfterExpenses = grossValue - Number(totalExpenses || 0);
-
     if (hourlyRate) {
-      const hourly = totalHours > 0 ? netAfterExpenses / totalHours : 0;
+      const hourly = totalHours > 0 ? Number(netValue || 0) / totalHours : 0;
       hourlyRate.innerHTML = `R$ ${formatBRL(hourly)}<span class="text-xs font-normal text-on-surface-variant">/h</span>`;
     }
   }
@@ -797,6 +930,8 @@ document.addEventListener('DOMContentLoaded', () => {
       manutencao: 'manutencao',
       oficina: 'manutencao',
       peca: 'manutencao',
+      recorrente: 'outros',
+      outros: 'outros',
       emergencia: 'emergencia',
       emergencias: 'emergencia',
       pneu: 'emergencia',
@@ -815,7 +950,8 @@ document.addEventListener('DOMContentLoaded', () => {
       oleo: 0,
       manutencao: 0,
       emergencia: 0,
-      alimentacao: 0
+      alimentacao: 0,
+      outros: 0
     };
 
     (expensesList || []).forEach((item) => {
@@ -832,7 +968,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { key: 'combustivel', label: 'Gasolina & Álcool', color: 'tertiary', bar: 'category-gasolina-bar', value: 'category-gasolina-value', percent: 'category-gasolina-percent', donut: 'donut-gasolina' },
       { key: 'manutencao', label: 'Manutenção Preventiva', color: 'secondary-container', bar: 'category-manutencao-bar', value: 'category-manutencao-value', percent: 'category-manutencao-percent', donut: 'donut-manutencao' },
       { key: 'alimentacao', label: 'Alimentação & Lanches', color: 'primary', bar: 'category-alimentacao-bar', value: 'category-alimentacao-value', percent: 'category-alimentacao-percent', donut: 'donut-alimentacao' },
-      { key: 'emergencia', label: 'Emergências & Troca de Óleo', color: 'outline', bar: 'category-emergencia-bar', value: 'category-emergencia-value', percent: 'category-emergencia-percent', donut: 'donut-emergencia' }
+      { key: 'emergencia', label: 'Emergências & Troca de Óleo', color: 'outline', bar: 'category-emergencia-bar', value: 'category-emergencia-value', percent: 'category-emergencia-percent', donut: 'donut-emergencia' },
+      { key: 'outros', label: 'Despesas recorrentes', color: 'secondary', bar: 'category-outros-bar', value: 'category-outros-value', percent: 'category-outros-percent', donut: 'donut-outros' }
     ];
 
     const ranked = entries
@@ -874,6 +1011,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function calcularCobrancasRecorrentes(regras, periodStart, periodEnd) {
+    const mesIndex = (date) => {
+      const [year, month] = date.split('-').map(Number);
+      return year * 12 + month - 1;
+    };
+    const formatarData = (year, month, day) =>
+      `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const primeiroMesPeriodo = mesIndex(periodStart);
+    const ultimoMesPeriodo = mesIndex(periodEnd);
+    const cobrancas = [];
+
+    (regras || []).forEach((regra) => {
+      const primeiroMes = Math.max(primeiroMesPeriodo, mesIndex(regra.data_inicio));
+      const ultimoMes = Math.min(ultimoMesPeriodo, regra.fim_em ? mesIndex(regra.fim_em) : ultimoMesPeriodo);
+      const diaVencimento = Number(regra.data_vencimento);
+
+      for (let mesAtual = primeiroMes; mesAtual <= ultimoMes; mesAtual += 1) {
+        const year = Math.floor(mesAtual / 12);
+        const month = mesAtual % 12;
+        const ultimoDiaDoMes = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+        const dia = Math.min(diaVencimento, ultimoDiaDoMes);
+        const dataCobranca = formatarData(year, month, dia);
+
+        if (dataCobranca < periodStart || dataCobranca > periodEnd) continue;
+        if (dataCobranca < regra.data_inicio || (regra.fim_em && dataCobranca > regra.fim_em)) continue;
+
+        cobrancas.push({
+          nome: regra.nome,
+          valor: regra.valor,
+          data_vencimento: dataCobranca
+        });
+      }
+    });
+
+    return cobrancas.sort((a, b) => a.data_vencimento.localeCompare(b.data_vencimento));
+  }
+
+  function renderizarObservacoesTurno(turnos) {
+    const container = document.getElementById('dashboard-turn-notes');
+    if (!container) return;
+
+    const observacoes = (turnos || [])
+      .filter((turno) => String(turno.observacao || '').trim())
+      .slice()
+      .reverse();
+
+    container.replaceChildren();
+
+    if (observacoes.length === 0) {
+      const emptyState = document.createElement('p');
+      emptyState.className = 'text-body-sm text-on-surface-variant';
+      emptyState.textContent = 'Nenhuma observação registrada neste período.';
+      container.appendChild(emptyState);
+      return;
+    }
+
+    observacoes.forEach((turno) => {
+      const item = document.createElement('article');
+      item.className = 'border-b border-outline-variant/20 pb-3 last:border-0 last:pb-0';
+
+      const date = document.createElement('p');
+      date.className = 'mb-1 font-label-caps text-label-caps text-tertiary uppercase';
+      const parsedDate = new Date(`${turno.data}T00:00:00`);
+      date.textContent = Number.isNaN(parsedDate.getTime())
+        ? turno.data
+        : parsedDate.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+      const note = document.createElement('p');
+      note.className = 'font-body-md text-body-md text-on-surface leading-relaxed';
+      note.textContent = turno.observacao.trim();
+
+      item.append(date, note);
+      container.appendChild(item);
+    });
+  }
+
   async function carregarMétricasDashboard(periodStart, periodEnd, periodName) {
     if (!window.supabase || !supabaseClient) {
       console.warn('Supabase ainda não está disponível.');
@@ -888,18 +1101,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const start = periodStart || toISO(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-      const end = periodEnd || toISO(new Date());
+      const start = periodStart || startDate || toISO(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+      const end = periodEnd || endDate || toISO(new Date());
 
       const { data: turnos, error: errorTurnos } = await supabaseClient
         .from('turnos')
-        .select('id, data, ganho_bruto, minutos_online')
+        .select('id, data, ganho_bruto, minutos_online, observacao')
         .eq('usuario_id', user.id)
         .gte('data', start)
         .lte('data', end)
         .order('data', { ascending: true });
 
       if (errorTurnos) throw errorTurnos;
+  renderizarObservacoesTurno(turnos || []);
 
       const turnoIds = (turnos || []).map((turno) => turno.id);
       let despesas = [];
@@ -914,8 +1128,22 @@ document.addEventListener('DOMContentLoaded', () => {
         despesas = despesasData || [];
       }
 
+      const { data: recurringRules, error: recurringRulesError } = await supabaseClient
+        .from('despesas_recorrentes')
+        .select('nome, valor, data_inicio, data_vencimento, fim_em')
+        .eq('usuario_id', user.id)
+        .lte('data_inicio', end)
+        .or(`fim_em.is.null,fim_em.gte.${start}`);
+
+      if (recurringRulesError) {
+        console.warn('Não foi possível consultar as regras recorrentes:', recurringRulesError);
+      }
+      const recurringExpenses = calcularCobrancasRecorrentes(recurringRules || [], start, end);
+
       const gross = (turnos || []).reduce((sum, turno) => sum + Number(turno.ganho_bruto || 0), 0);
-      const expenses = despesas.reduce((sum, despesa) => sum + Number(despesa.valor || 0), 0);
+      const turnoExpensesTotal = despesas.reduce((sum, despesa) => sum + Number(despesa.valor || 0), 0);
+      const recurringExpensesTotal = recurringExpenses.reduce((sum, expense) => sum + Number(expense.valor || 0), 0);
+      const expenses = turnoExpensesTotal + recurringExpensesTotal;
       const net = gross - expenses;
       const despesasPorCategoria = despesas.reduce((acc, despesa) => {
         const categoria = String(despesa.categoria || 'outros').trim().toLowerCase();
@@ -924,15 +1152,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }, {});
 
       setDashboardNumericValues(gross, expenses, net);
-      updateAppTimeMetrics(turnos || [], expenses);
+      updateAppTimeMetrics(turnos || [], net);
       updateCategoryMetrics(despesas);
-      renderizarDespesasPorCategoria(despesasPorCategoria, expenses);
+      renderizarDespesasPorCategoria(despesasPorCategoria, turnoExpensesTotal);
+      renderizarDespesasRecorrentesDashboard(recurringExpenses);
       console.log(`[Dashboard] Dados carregados do Supabase: ${periodName || 'periodo'} | bruto=${gross} | despesas=${expenses} | liquido=${net}`);
     } catch (error) {
       console.error('Erro ao consultar métricas do dashboard no Supabase:', error);
       setDashboardNumericValues(0, 0, 0);
       updateAppTimeMetrics([], 0);
       updateCategoryMetrics([]);
+      renderizarDespesasRecorrentesDashboard([]);
+      renderizarObservacoesTurno([]);
     }
   }
 
@@ -1033,6 +1264,7 @@ function renderizarDespesasPorCategoria(despesasPorCategoria, totalDespesas) {
     combustivel: { label: 'Combustível', color: 'bg-primary' },
     manutencao: { label: 'Manutenção', color: 'bg-tertiary' },
     alimentacao: { label: 'Alimentação', color: 'bg-secondary' },
+    recorrente: { label: 'Despesas recorrentes', color: 'bg-secondary' },
     outros: { label: 'Outros', color: 'bg-outline' }
   };
 
@@ -1068,4 +1300,49 @@ function renderizarDespesasPorCategoria(despesasPorCategoria, totalDespesas) {
       </div>
     `;
   }).join('');
+}
+
+function renderizarDespesasRecorrentesDashboard(despesas) {
+  const container = document.getElementById('dashboard-recurring-expenses-list');
+  const totalElement = document.getElementById('dashboard-recurring-expenses-total');
+  if (!container) return;
+
+  const total = (despesas || []).reduce((sum, expense) => sum + Number(expense.valor || 0), 0);
+  if (totalElement) totalElement.textContent = `R$ ${formatBRL(total)}`;
+  container.replaceChildren();
+
+  if (!despesas?.length) {
+    const emptyState = document.createElement('li');
+    emptyState.className = 'py-3 text-center text-body-sm text-on-surface-variant';
+    emptyState.textContent = 'Nenhuma cobrança recorrente neste período.';
+    container.appendChild(emptyState);
+    return;
+  }
+
+  despesas.forEach((expense) => {
+    const item = document.createElement('li');
+    item.className = 'flex items-center justify-between gap-3 border-b border-outline-variant/20 py-3 last:border-0';
+
+    const details = document.createElement('div');
+    details.className = 'flex min-w-0 flex-col';
+
+    const name = document.createElement('span');
+    name.className = 'break-words font-body-md text-body-md font-medium text-on-surface';
+    name.textContent = expense.nome;
+
+    const dueDate = document.createElement('span');
+    dueDate.className = 'font-body-sm text-body-sm text-on-surface-variant';
+    const parsedDate = new Date(`${expense.data_vencimento}T00:00:00`);
+    dueDate.textContent = Number.isNaN(parsedDate.getTime())
+      ? expense.data_vencimento
+      : parsedDate.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    const amount = document.createElement('span');
+    amount.className = 'shrink-0 font-metric-tabular text-on-surface';
+    amount.textContent = `R$ ${formatBRL(expense.valor)}`;
+
+    details.append(name, dueDate);
+    item.append(details, amount);
+    container.appendChild(item);
+  });
 }

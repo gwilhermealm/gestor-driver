@@ -172,15 +172,25 @@
 <!-- Comentário: esta área foi mantida vazia no layout para remover o card de despesas por categoria e evitar dados mockados do protótipo. -->
 
 <!-- Card de Despesas por Categoria -->
-<div class="bg-surface border border-outline-variant rounded-2xl p-4 shadow-sm">
-  <h3 class="text-title-sm font-semibold text-on-surface mb-3">Despesas por Categoria</h3>
+<section class="bg-surface-container-low rounded-xl p-space-md shadow-sm lg:col-span-2">
+  <h3 class="font-headline-sm text-headline-sm text-on-surface mb-3">Despesas do turno por categoria</h3>
   
   <!-- Contêiner dinâmico das barras -->
   <div id="category-expenses-list" class="space-y-3">
     <!-- As barras serão injetadas via JavaScript aqui -->
     <p class="text-body-sm text-on-surface-variant text-center py-2">Carregando despesas...</p>
   </div>
-</div>
+</section>
+
+<section class="bg-surface-container-low rounded-xl p-space-md shadow-sm lg:col-span-1">
+  <div class="mb-2 flex items-center justify-between gap-2">
+    <h3 class="font-headline-sm text-headline-sm text-on-surface">Despesas recorrentes</h3>
+    <span id="dashboard-recurring-expenses-total" class="shrink-0 font-metric-tabular text-tertiary">R$ 0,00</span>
+  </div>
+  <ul id="dashboard-recurring-expenses-list" class="divide-y divide-outline-variant/20">
+    <li class="py-3 text-center text-body-sm text-on-surface-variant">Carregando cobranças...</li>
+  </ul>
+</section>
 
 
 <!-- Card removido: evolução do mês foi desativado para evitar o mockup e manter o dashboard mais enxuto. -->
@@ -194,11 +204,11 @@
       </div>
       <div class="flex flex-col">
         <h3 class="font-headline-sm text-headline-sm text-on-surface">Observações do Turno</h3>
-        <span class="font-body-sm text-body-sm text-on-surface-variant">Anotações e justificativas registadas</span>
+        <span class="font-body-sm text-body-sm text-on-surface-variant">Anotações do período selecionado</span>
       </div>
     </div>
     <span class="font-label-caps text-[10px] text-tertiary bg-tertiary/10 px-2.5 py-1 rounded-full uppercase font-bold tracking-wider">
-      Ativo
+      Período
     </span>
   </div>
 
@@ -206,9 +216,9 @@
   <div class="w-full bg-surface-container rounded-lg p-4 flex flex-col justify-between min-h-[120px] border border-outline-variant/20">
     <div class="flex items-start gap-2.5">
       <span class="material-symbols-outlined text-[18px] text-on-surface-variant/70 mt-0.5 shrink-0">format_quote</span>
-      <p id="dashboard-turn-notes" class="font-body-md text-body-md text-on-surface leading-relaxed italic">
-        Nenhuma observação registada para este turno.
-      </p>
+      <div id="dashboard-turn-notes" class="flex max-h-64 min-w-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
+        <p class="text-body-sm text-on-surface-variant">Nenhuma observação registrada neste período.</p>
+      </div>
     </div>
 
     <div class="flex items-center justify-end gap-1.5 pt-3 mt-2 border-t border-outline-variant/15 text-on-surface-variant font-label-caps text-[10px]">
@@ -583,9 +593,9 @@
 <div class="fixed top-20 left-4 right-4 max-w-[360px] mx-auto bg-primary-container text-on-primary-container p-3 rounded-xl shadow-xl flex items-center justify-between gap-2 z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none" id="toast-success">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-[22px]">verified</span>
-<span class="font-headline-sm text-headline-sm font-bold">Turno salvo com sucesso!</span>
+<span class="font-headline-sm text-headline-sm font-bold" data-toast-message>Turno salvo com sucesso!</span>
 </div>
-<span class="font-body-sm text-body-sm opacity-80">Hoje às 22:45</span>
+<span class="font-body-sm text-body-sm opacity-80" data-toast-time>Hoje</span>
 </div>
 </div>
 <div id="view-historico" class="flex flex-col w-full min-h-[50vh] items-center justify-center text-center gap-3 lg:col-span-3" style="display:none">
@@ -611,11 +621,21 @@
       carregando@email.com
     </p>
   </div>
-      <button id="btn-open-monthly-expense" type="button" aria-haspopup="dialog" aria-controls="monthly-expense-modal" class="mt-4 w-full max-w-[360px] px-4 py-3 rounded-lg border border-primary/30 bg-primary/10 text-primary font-headline-sm flex items-center justify-center gap-2 hover:bg-primary/15 transition-colors">
-      <span class="material-symbols-outlined">event_repeat</span>
-      <span>Adicionar despesa mensal</span>
-  </button>
-      <p id="monthly-expense-feedback" role="status" class="hidden font-body-sm text-body-sm text-primary"></p>
+      <div class="mt-4 flex w-full max-w-[560px] items-stretch gap-2">
+        <button id="btn-open-monthly-expense" type="button" aria-haspopup="dialog" aria-controls="monthly-expense-modal" class="flex min-h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-center font-headline-sm text-primary transition-colors hover:bg-primary/15">
+          <span class="material-symbols-outlined shrink-0">event_repeat</span>
+          <span class="leading-tight">Adicionar despesa mensal</span>
+        </button>
+        <button id="btn-toggle-monthly-expenses" type="button" aria-controls="monthly-expenses-list" aria-expanded="false" class="flex min-h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border border-outline-variant/30 bg-surface-container-high px-3 py-2 text-center font-headline-sm text-on-surface transition-colors hover:bg-surface-container-highest">
+          <span id="monthly-expenses-toggle-icon" class="material-symbols-outlined shrink-0">expand_more</span>
+          <span id="monthly-expenses-toggle-label" class="leading-tight">Ver despesas</span>
+        </button>
+      </div>
+      <section id="monthly-expenses-list" aria-label="Despesas recorrentes" class="hidden w-full max-w-[560px] rounded-xl border border-outline-variant/30 bg-surface-container-low p-4 text-left">
+        <h3 class="mb-2 font-headline-sm text-headline-sm text-on-surface">Despesas recorrentes</h3>
+        <p id="monthly-expenses-list-message" role="status" class="text-body-sm text-on-surface-variant"></p>
+        <ul id="monthly-expenses-items" class="divide-y divide-outline-variant/20"></ul>
+      </section>
 
 
 
@@ -629,7 +649,7 @@
   <div class="flex items-start justify-between gap-4 border-b border-outline-variant/20 p-5">
     <div>
       <h2 id="monthly-expense-title" class="font-headline-md text-headline-md text-on-surface">Nova despesa mensal</h2>
-      <p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">Informe o nome e o valor recorrente.</p>
+      <p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">Defina o mês de início e o dia do vencimento mensal.</p>
     </div>
     <button type="button" data-close-monthly-expense aria-label="Fechar" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface">
       <span class="material-symbols-outlined">close</span>
@@ -645,6 +665,16 @@
       <div class="flex items-center gap-2 rounded-lg border border-outline-variant/40 bg-surface px-3 focus-within:border-primary">
         <span class="text-on-surface-variant">R$</span>
         <input id="monthly-expense-value" name="valor" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="0,00" class="w-full bg-transparent py-3 text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none">
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="flex min-w-0 flex-col gap-1.5">
+        <label for="monthly-expense-start" class="font-label-caps text-label-caps uppercase text-on-surface-variant">Início</label>
+        <input id="monthly-expense-start" name="data_inicio" type="month" required class="w-full min-w-0 rounded-lg border border-outline-variant/40 bg-surface px-3 py-3 text-on-surface focus:border-primary focus:outline-none">
+      </div>
+      <div class="flex min-w-0 flex-col gap-1.5">
+        <label for="monthly-expense-due-day" class="font-label-caps text-label-caps uppercase text-on-surface-variant">Vence no dia</label>
+        <input id="monthly-expense-due-day" name="data_vencimento" type="number" min="1" max="31" step="1" inputmode="numeric" required value="1" class="w-full min-w-0 rounded-lg border border-outline-variant/40 bg-surface px-3 py-3 text-on-surface focus:border-primary focus:outline-none">
       </div>
     </div>
     <p id="monthly-expense-error" role="alert" class="hidden font-body-sm text-body-sm text-error"></p>

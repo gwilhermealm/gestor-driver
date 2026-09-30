@@ -64,3 +64,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+function redirecionarWhatsAp() {
+  // Remove caracteres não numéricos do número
+
+ const numero= '5585997897202'
+ const mensagem = 'Olá! Gostaria de testar o Driver gestor.';
+  
+  // Codifica a mensagem para o formato de URL
+  const mensagemEncoded = encodeURIComponent(mensagem);
+  
+  // Cria o link da API do WhatsApp
+  const url = `https://wa.me/${numero}?text=${mensagemEncoded}`;
+  
+  // Abre em uma nova aba (ou no app do WhatsApp no celular)
+  window.open(url, '_blank');
+}
+
+// Exemplo de uso:
+// redirecionarWhatsApp('5585999999999', 'Olá! Gostaria de mais informações.');
