@@ -35,6 +35,71 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (profileName) profileName.textContent = nomeFormatado;
   if (emailElement) emailElement.textContent = email;
 
+  const openMonthlyExpenseButton = document.getElementById('btn-open-monthly-expense');
+  const monthlyExpenseModal = document.getElementById('monthly-expense-modal');
+  const monthlyExpenseForm = document.getElementById('monthly-expense-form');
+  const monthlyExpenseError = document.getElementById('monthly-expense-error');
+  const monthlyExpenseFeedback = document.getElementById('monthly-expense-feedback');
+  const saveMonthlyExpenseButton = document.getElementById('btn-save-monthly-expense');
+
+  if (openMonthlyExpenseButton && monthlyExpenseModal) {
+    openMonthlyExpenseButton.addEventListener('click', () => {
+      monthlyExpenseFeedback?.classList.add('hidden');
+      monthlyExpenseError?.classList.add('hidden');
+      monthlyExpenseModal.showModal();
+      document.getElementById('monthly-expense-name')?.focus();
+    });
+
+    monthlyExpenseModal.querySelectorAll('[data-close-monthly-expense]').forEach((button) => {
+      button.addEventListener('click', () => monthlyExpenseModal.close());
+    });
+
+    monthlyExpenseModal.addEventListener('click', (event) => {
+      if (event.target === monthlyExpenseModal) monthlyExpenseModal.close();
+    });
+  }
+
+  if (monthlyExpenseForm && monthlyExpenseError && saveMonthlyExpenseButton) {
+    monthlyExpenseForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      monthlyExpenseError.classList.add('hidden');
+      saveMonthlyExpenseButton.disabled = true;
+      saveMonthlyExpenseButton.textContent = 'Salvando...';
+
+      const formData = new FormData(monthlyExpenseForm);
+      const nome = String(formData.get('nome') || '').trim();
+      const valor = Number(formData.get('valor'));
+
+      try {
+        const { error: insertError } = await supabaseClient
+          .from('despesas_recorrentes')
+          .insert({ usuario_id: user.id, nome, valor });
+
+        if (insertError) throw insertError;
+
+        monthlyExpenseForm.reset();
+        monthlyExpenseModal?.close();
+        if (monthlyExpenseFeedback) {
+          monthlyExpenseFeedback.textContent = 'Despesa mensal cadastrada com sucesso.';
+          monthlyExpenseFeedback.classList.remove('hidden');
+        }
+      } catch (insertError) {
+        const errorInfo = {
+          message: insertError?.message || String(insertError),
+          code: insertError?.code,
+          details: insertError?.details,
+          hint: insertError?.hint
+        };
+        console.error('Erro ao cadastrar despesa mensal:', errorInfo);
+        monthlyExpenseError.textContent = `Não foi possível salvar: ${errorInfo.message}`;
+        monthlyExpenseError.classList.remove('hidden');
+      } finally {
+        saveMonthlyExpenseButton.disabled = false;
+        saveMonthlyExpenseButton.textContent = 'Salvar despesa';
+      }
+    });
+  }
+
   const btnLogout = document.getElementById('btnLogout');
   if (btnLogout) {
     btnLogout.addEventListener('click', async () => {
@@ -680,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (summaryNet) summaryNet.textContent = 'R$ ' + formatBRL(net);
   }
 
-  function updateAppTimeMetrics(turnos) {
+  function updateAppTimeMetrics(turnos, totalExpenses = 0) {
     const totalMinutes = (turnos || []).reduce((sum, turno) => sum + Number(turno.minutos_online || 0), 0);
     const totalHours = totalMinutes / 60;
     const avgHours = (turnos || []).length ? totalHours / (turnos || []).length : 0;
@@ -699,8 +764,8 @@ document.addEventListener('DOMContentLoaded', () => {
       appAverage.textContent = `Média ${(avgHours || 0).toFixed(1)}h/dia`;
     }
 
-    const netValue = (turnos || []).reduce((sum, turno) => sum + Number(turno.ganho_bruto || 0), 0);
-    const netAfterExpenses = Number(netValue || 0) - (turnos || []).reduce((sum, turno) => sum + Number(turno.ganho_bruto || 0), 0) * 0.32;
+    const grossValue = (turnos || []).reduce((sum, turno) => sum + Number(turno.ganho_bruto || 0), 0);
+    const netAfterExpenses = grossValue - Number(totalExpenses || 0);
 
     if (hourlyRate) {
       const hourly = totalHours > 0 ? netAfterExpenses / totalHours : 0;
@@ -859,14 +924,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }, {});
 
       setDashboardNumericValues(gross, expenses, net);
-      updateAppTimeMetrics(turnos || []);
+      updateAppTimeMetrics(turnos || [], expenses);
       updateCategoryMetrics(despesas);
       renderizarDespesasPorCategoria(despesasPorCategoria, expenses);
       console.log(`[Dashboard] Dados carregados do Supabase: ${periodName || 'periodo'} | bruto=${gross} | despesas=${expenses} | liquido=${net}`);
     } catch (error) {
       console.error('Erro ao consultar métricas do dashboard no Supabase:', error);
       setDashboardNumericValues(0, 0, 0);
-      updateAppTimeMetrics([]);
+      updateAppTimeMetrics([], 0);
       updateCategoryMetrics([]);
     }
   }
